@@ -1,0 +1,130 @@
+body{
+    background-color: black;
+    color:white;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.resumebody{
+
+    background-color: grey;
+}
+
+h1{
+    color: gold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-style:oblique;
+    text-align: center;
+}
+
+.custom-list {
+    list-style-type: square;
+    padding-left: 20px;
+}
+
+.main-content{
+    margin-left:220px;
+    padding:20px;
+}
+
+.mb-0{
+
+    color: rgb(22, 22, 82) 
+}
+
+.mb-0 ul li a{
+
+    color: rgb(22, 22, 82)
+
+}
+.dates{
+
+    color:rgb(22, 22, 82) !important
+}
+
+.sidebar {
+    background-color: rgb(76, 9, 95);
+    width: 200px;
+    height: 100vh; /* Full viewport height */
+    left: 0;
+    top: 0; /* Stick to the top */
+    padding: 15px;
+    position: fixed;
+}
+
+.sidebar ul{
+    list-style: none ;
+    padding:0;
+}
+
+.sidebar ul li{
+    margin: 15px 0;
+}
+
+.sidebar ul li a{
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar ul li a:hover{
+text-decoration: underline;
+}
+
+
+.box-model{
+    padding:15px;
+    background-color: greenyellow;
+    border:5px solid blue;
+    margin: 20px;
+}
+
+.title{
+    color:  rgb(76, 9, 95) ;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 20px 0;
+    text-shadow: 
+        2px 2px 0px gold,  /* Right-bottom */
+       -2px 2px 0px gold,  /* Left-bottom */
+        2px -2px 0px gold, /* Right-top */
+       -2px -2px 0px gold; /* Left-top */
+}
+
+
+.custom-bullets {
+    list-style: none; /* Remove default bullets */
+    padding-left: 20px; /* Add space for custom bullets */
+  }
+  
+  .custom-bullets li {
+    background: url('../images/RavenHead.png') no-repeat left center;
+    padding-left: 30px; /* Adjust space between bullet and text */
+    background-size: 30px 20px; /* Adjust the size of the bullet image */
+  }
+
+  .alternate {
+
+    margin-left: 300px;
+
+  }
+
+  .lamar{
+
+    margin-left: 200px;
+    height: 250px;
+    width: auto;
+  }
+
+  .plug {
+    font-size: smaller;
+}
+
+.plug ul li {
+    color: rgb(0, 255, 85); /* Set the text color to yellow */
+    text-decoration: underline; /* Underline the text */
+}
+
+.plug ul li a:hover {
+    background-color: lightskyblue; /* Change background on hover */
+}
+

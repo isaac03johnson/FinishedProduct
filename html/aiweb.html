@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Wars Hangman Game</title>
+    <style>
+        body {
+            font-family: 'Star Jedi', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+        }
+        @font-face {
+            font-family: 'Star Jedi';
+            src: url('https://fonts.cdnfonts.com/s/17263/Starjedi.ttf') format('truetype');
+        }
+        .hangman-container {
+            text-align: center;
+        }
+        .word {
+            font-size: 2em;
+            letter-spacing: 0.5em;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .letters {
+            margin-top: 20px;
+        }
+        .letter {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            margin: 5px;
+            border: 1px solid #fff;
+            cursor: pointer;
+        }
+        .letter.correct {
+            background-color: #4caf50;
+            color: white;
+        }
+        .letter.wrong {
+            background-color: #f44336;
+            color: white;
+        }
+        .letter.selected {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .counter {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+        .lose-message {
+            font-size: 2em;
+            color: red;
+        }
+        .play-again {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .hangman-drawing {
+            margin-top: 20px;
+            position: relative;
+            width: 120px;
+            height: 200px;
+        }
+        .hangman-part {
+            display: none;
+            position: absolute;
+        }
+        #hangman-head {
+            top: 20px;
+            left: 60px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+        #hangman-body {
+            top: 40px;
+            left: 69px;
+            width: 3px;
+            height: 50px;
+            background-color: white;
+        }
+        #hangman-left-arm {
+            top: 65px;
+            left: 69px;
+            width: 30px;
+            height: 3px;
+            background-color: white;
+            transform: rotate(-45deg);
+            transform-origin: top left;
+        }
+        #hangman-right-arm {
+            top: 65px;
+            left: 39px;
+            width: 30px;
+            height: 3px;
+            background-color: white;
+            transform: rotate(45deg);
+            transform-origin: top right;
+        }
+        #hangman-left-leg {
+            top: 90px;
+            left: 69px;
+            width: 30px;
+            height: 3px;
+            background-color: white;
+            transform: rotate(45deg);
+            transform-origin: top left;
+        }
+        #hangman-right-leg {
+            top: 90px;
+            left: 39px;
+            width: 30px;
+            height: 3px;
+            background-color: white;
+            transform: rotate(-45deg);
+            transform-origin: top right;
+        }
+        .hangman-pole {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 200px;
+            background-color: white;
+        }
+        .hangman-beam {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 70px;
+            height: 3px;
+            background-color: white;
+        }
+        .hangman-rope {
+            position: absolute;
+            top: 0;
+            left: 60px;
+            width: 3px;
+            height: 20px;
+            background-color: white;
+        }
+        .bottom-text {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="hangman-container">
+        <div class="word" id="word"></div>
+        <div class="message" id="message"></div>
+        <div class="letters" id="letters"></div>
+        <div class="counter" id="counter">Guesses left: 6</div>
+        <button class="play-again" id="play-again" style="display: none;" onclick="startGame()">Play Again</button>
+        <div class="hangman-drawing">
+            <div class="hangman-pole"></div>
+            <div class="hangman-beam"></div>
+            <div class="hangman-rope"></div>
+            <div id="hangman-head" class="hangman-part"></div>
+            <div id="hangman-body" class="hangman-part"></div>
+            <div id="hangman-left-arm" class="hangman-part"></div>
+            <div id="hangman-right-arm" class="hangman-part"></div>
+            <div id="hangman-left-leg" class="hangman-part"></div>
+            <div id="hangman-right-leg" class="hangman-part"></div>
+        </div>
+    </div>
+    <div class="bottom-text">Check out my Resume and Ravens fanpage!
+        <br>
+        <ul>
+            <li><a href="scratch.html">Ravens Fanpage</a> </li>
+            <li><a href="../index.html">Resume</a> </li>
+
+        </ul>
+    </div>
+    <script>
+        const words = [
+            "anakin", "bailorgana", "battledroid", "benkenobi", "bobafett", "chewbacca", "clonewars", "countdooku", 
+            "darthmaul", "darthvader", "deathstar", "galactic", "hansolo", "jabbathehutt", "kashyyyk", "kylo", 
+            "lightsaber", "mandalorian", "macewindu", "millenniumfalcon", "obiwan", "palpatine", "qui-gon", 
+            "rebelalliance", "skywalker", "stormtrooper", "tatooine", "wookiee", "ackbar", "ahsoka", "amidala", 
+            "battledroid", "bespin", "blaster", "blueharvest", "bountyhunter", "carbonite", "chancellor", "chiss", 
+            "coruscant", "dagobah", "dantooine", "darksaber", "endor", "exegol", "geonosis", "grievous", "hyperspace", 
+            "kamino", "kessel", "kybercrystal", "lightsaber", "mandalore", "mazkanata", "midichlorians", "mustafar", 
+            "neimoidian", "padawan", "phantommenace", "podracer", "quarren", "rancor", "resistance", "republic", 
+            "sabacc", "sarlacc", "separatist", "starfighter", "starkiller", "togruta", "tuskenraider", "wampa", 
+            "wicket", "yavin"
+        ];
+        let selectedWord;
+        let guessedLetters;
+        let wrongGuesses;
+        const maxWrongGuesses = 6;
+
+        const wordElement = document.getElementById("word");
+        const messageElement = document.getElementById("message");
+        const lettersElement = document.getElementById("letters");
+        const counterElement = document.getElementById("counter");
+        const playAgainButton = document.getElementById("play-again");
+        const hangmanParts = [
+            document.getElementById("hangman-head"),
+            document.getElementById("hangman-body"),
+            document.getElementById("hangman-left-leg"),
+            document.getElementById("hangman-right-leg"),
+            document.getElementById("hangman-left-arm"),
+            document.getElementById("hangman-right-arm")
+        ];
+
+        function startGame() {
+            selectedWord = words[Math.floor(Math.random() * words.length)];
+            guessedLetters = [];
+            wrongGuesses = 0;
+            messageElement.innerText = "";
+            counterElement.innerText = `Guesses left: ${maxWrongGuesses}`;
+            playAgainButton.style.display = "none";
+            hangmanParts.forEach(part => part.style.display = "none");
+            displayWord();
+            displayLetters();
+        }
+
+        function displayWord() {
+            wordElement.innerHTML = selectedWord.split("").map(letter => guessedLetters.includes(letter) ? letter : (letter === " " ? " " : "_")).join(" ");
+        }
+
+        function displayLetters() {
+            const alphabet = "abcdefghijklmnopqrstuvwxyz";
+            lettersElement.innerHTML = alphabet.split("").map(letter => `
+                <div class="letter" id="letter-${letter}" onclick="guessLetter('${letter}')">${letter}</div>
+            `).join("");
+        }
+
+        function guessLetter(letter) {
+            const letterElement = document.getElementById(`letter-${letter}`);
+            if (guessedLetters.includes(letter) || wrongGuesses >= maxWrongGuesses) return;
+
+            guessedLetters.push(letter);
+            letterElement.classList.add("selected");
+
+            if (selectedWord.includes(letter)) {
+                letterElement.classList.add("correct");
+                displayWord();
+                if (!wordElement.innerText.includes("_")) {
+                    messageElement.innerText = "You win!";
+                    playAgainButton.style.display = "block";
+                }
+            } else {
+                wrongGuesses++;
+                letterElement.classList.add("wrong");
+                counterElement.innerText = `Guesses left: ${maxWrongGuesses - wrongGuesses}`;
+                hangmanParts[wrongGuesses - 1].style.display = "block";
+                if (wrongGuesses >= maxWrongGuesses) {
+                    messageElement.innerHTML = `<span class="lose-message">You lose! The word was "${selectedWord}".</span>`;
+                    playAgainButton.style.display = "block";
+                }
+            }
+        }
+
+        startGame();
+    </script>
+</body>
+</html>
